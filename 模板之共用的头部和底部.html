@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅游景区景点订票系统 - 专业旅游景区订票平台</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 基础样式设置 */
+        :root {
+            --primary-color: #2c7873;      /* 主色调 - 深青色 */
+            --secondary-color: #6fb98f;    /* 辅助色 - 绿色 */
+            --accent-color: #ff6b35;       /* 强调色 - 橙色（参考模板） */
+            --dark-color: #2c3e50;         /* 深色文字 */
+            --light-color: #f8f9fa;        /* 浅色背景 */
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        /* 顶部导航栏样式 */
+        .top-header {
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            padding: 10px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: var(--accent-color);
+            margin-right: 8px;
+        }
+        
+        /* 搜索框样式（参考模板风格） */
+        .search-box {
+            border: 2px solid var(--accent-color);
+            border-radius: 25px;
+            overflow: hidden;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .search-input {
+            border: none;
+            padding: 10px 15px;
+        }
+        
+        .search-input:focus {
+            box-shadow: none;
+        }
+        
+        .search-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 0 25px 25px 0;
+        }
+        
+        .search-btn:hover {
+            background: #e55a2b;
+        }
+        
+        /* 主菜单样式（参考模板黑色风格） */
+        .main-menu {
+            background: var(--dark-color);
+            border-radius: 0;
+        }
+        
+        .menu-link {
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .menu-link i {
+            margin-right: 8px;
+        }
+        
+        .menu-link:hover, .menu-link.active {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .menu-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--accent-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .menu-link:hover::after {
+            width: 80%;
+        }
+        
+        /* 轮播图区域 */
+        .carousel-item {
+            height: 260px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .carousel-caption {
+            background: rgba(0,0,0,0.6);
+            border-radius: 10px;
+            padding: 2rem;
+            animation: slideInUp 1s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 热门景点区域 */
+        .section-title {
+            text-align: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        /* 旅游线路图片统一样式 */
+        .tour-line-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .card:hover .tour-line-image {
+            transform: scale(1.1);
+        }
+        
+        .card:hover .card-img-top {
+            transform: scale(1.1);
+        }
+        
+        .price-tag {
+            background: linear-gradient(135deg, var(--accent-color), #ff6b6b);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        /* 特价门票区域 */
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4757;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 排行榜样式（参考模板） */
+        .rank-number {
+            background: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        /* 特色服务区域 */
+        .feature-box {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-box:hover {
+            background: var(--light-color);
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        /* 统计数据区域 */
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 底部样式 */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .carousel-item {
+                height: 300px;
+            }
+            
+            .menu-link {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 共用的头部 开始 -->
+    <!-- 顶部导航栏 -->
+    <div class="top-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- 左侧LOGO -->
+                <div class="col-md-4">
+                    <a href="#" class="logo">
+                        <i class="fas fa-mountain-sun"></i>旅游景区景点订票系统
+                    </a>
+                </div>
+                
+                <!-- 中间搜索框 -->
+                <div class="col-md-5">
+                    <div class="search-box">
+                        <div class="input-group">
+                            <input type="text" class="form-control search-input" placeholder="搜索景点、城市或旅游线路..." />
+                            <button class="btn search-btn">
+                                <i class="fas fa-search"></i> 搜索
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧登录注册 -->
+                <div class="col-md-3 text-end">
+                    <a href="#" class="btn btn-outline-primary me-2">登录</a>
+                    <a href="#" class="btn btn-primary">注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主菜单 -->
+    <nav class="main-menu">
+        <div class="container">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex">
+                    <a href="#" class="menu-link active">
+                        <i class="fas fa-home"></i>首页
+                    </a>
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-mountain"></i>热门景点
+                    </a>
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-route"></i>旅游线路
+                    </a>
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-ticket-alt"></i>特价门票
+                    </a>
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-newspaper"></i>旅游攻略
+                    </a>
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-info-circle"></i>资讯中心
+                    </a>                    
+                </div>
+                <div class="d-flex">
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-comment-dots"></i>留言反馈
+                    </a>
+                    <a href="#" class="menu-link">
+                        <i class="fas fa-info-circle"></i>关于我们
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- 共用的头部 结束 -->
+
+
+
+
+    <br><br><br><br><br><br><br>
+
+
+
+
+
+    <!-- 共用的底部 开始 -->
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-mountain-sun me-2"></i>山水之旅
+                    </h5>
+                    <p class="text-white">专业旅游景区订票平台，致力于为游客提供最优质的旅游体验服务。</p>
+                    <div class="footer-links">
+                        <a href="#"><i class="fab fa-weixin me-1"></i>微信</a>
+                        <a href="#"><i class="fab fa-weibo me-1"></i>微博</a>
+                        <a href="#"><i class="fab fa-qq me-1"></i>QQ</a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6>快速链接</h6>
+                    <div class="footer-links d-flex flex-column">
+                        <a href="#">首页</a>
+                        <a href="#">热门景点</a>
+                        <a href="#">旅游线路</a>
+                        <a href="#">特价门票</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6>联系我们</h6>
+                    <p class="text-white small">
+                        <i class="fas fa-phone me-2"></i>400-888-9999<br>
+                        <i class="fas fa-envelope me-2"></i>service@shan-shui.com<br>
+                        <i class="fas fa-clock me-2"></i>周一至周日 8:00-22:00
+                    </p>
+                </div>
+                <div class="col-lg-3 mb-4">
+                    <h6>订阅资讯</h6>
+                    <p class="text-white small">获取最新旅游资讯和特价优惠</p>
+                    <div class="input-group mb-2">
+                        <input type="email" class="form-control" placeholder="输入邮箱">
+                        <button class="btn btn-primary">订阅</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center text-white">
+                <p class="mb-0">&copy; 2027 山水之旅旅游景区订票平台 版权所有</p>
+            </div>
+        </div>
+    </footer>
+    <!-- 共用的底部 结束 -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
